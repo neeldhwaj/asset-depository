@@ -1,0 +1,102 @@
+/**
+* Asset depository Business network definition
+ */
+
+ namespace org.imaginea.asset.depository
+
+ /**
+ * Actors -
+ * Issuer
+ * Investor
+ * Auditor
+ * Exchange
+ * Public 
+ * Administrator
+ */
+
+ enum CouponType {
+     o FIXED
+     o FLOATING
+ }
+
+ enum TimePeriod {
+     o DAY
+     o WEEK
+     o MONTH
+     o YEAR
+ }
+
+ abstract participant Member identified by memberEmail {
+     o String memberEmail
+     o String name
+ }
+
+ participant Issuer extends Member {
+
+ }
+
+ participant Investor extends Member {
+
+ }
+
+ participant Auditor extends Member {
+
+ }
+
+ concept PaymentFrequency {
+     o Integer periodMultiplier
+     o TimePeriod period     
+ }
+
+ concept Bond {
+     o String[] instrumentID
+     o String description optional
+     o String currency optional
+     o String[] exchangeID
+     o String clearanceSystem optional
+     o String definition optional
+     o String seniority optional
+     o CouponType couponType optional
+     o Double couponRate optional
+     o DateTime maturity
+     o Double parValue
+     o Double faceAmount
+     o PaymentFrequency paymentFrequency
+     o String dayCount
+     --> Issuer issuer
+ }      
+
+ asset BondAsset identified by ISINCode {
+     o String ISINCode
+     o Bond bond
+ }
+
+ concept Equity {
+     o String[] instrumentID
+     o String description optional
+     o String currency optional
+     o String clearanceSystem optional
+     o String definition optional
+     o String[] exchangeID
+     o String relatedExchangeID
+     o String optionsExchangeID
+     o String specifiedExchangeID 
+ }
+
+ asset EquityAsset identified by ISINCode {
+     o String ISINCode
+     o Equity equity
+     -->Issuer issuer
+ }
+
+ transaction PublishBond identified by publishBondTransactionID {
+     o String publishBondTransactionID
+     o String ISINCode
+     o Bond bond
+ }
+
+ transaction PublishEquity identified by publishEquityTransactionID {
+  o String publishEquityTransactionID
+  o String ISINCode
+  o Equity equity
+}
